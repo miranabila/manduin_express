@@ -110,6 +110,33 @@ app.post(`/landmarks/`, async (req, res) => {
   res.json(placeAroundLandmark)
 })
 
+app.get(`/landmark/:id`, async (req, res) => {
+  const { id } = req.params
+
+  const getLandmark = await prisma.landmark.findUnique({
+    where: { land_id: Number(id) },
+  })
+  res.json(getLandmark)
+})
+
+app.get(`/namalandmark/:searchString`, async (req, res) => {
+  const { searchString } = req.params
+
+  const namaLandmark = await prisma.landmark.findMany({
+    where:  { nama: { contains: searchString } },
+  })
+  res.json(namaLandmark)
+})
+
+app.get(`/wisata/:id`, async (req, res) => {
+  const { id } = req.params
+
+  const getWisata = await prisma.wisata.findMany({
+    where: { land_id: Number(id) },
+  })
+  res.json(getWisata)
+})
+
 
 app.get('/user/:id/drafts', async (req, res) => {
   const { id } = req.params
@@ -133,13 +160,13 @@ app.get('/feed', async (req, res) => {
   const or = searchString
     ? {
         OR: [
-          { title: { contains: searchString } },
+          { nama: { contains: searchString } },
           { content: { contains: searchString } },
         ],
       }
     : {}
 
-  const posts = await prisma.post.findMany({
+  const posts = await prisma.landmark.findMany({
     where: {
       published: true,
       ...or,

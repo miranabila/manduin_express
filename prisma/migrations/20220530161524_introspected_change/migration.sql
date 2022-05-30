@@ -1,10 +1,10 @@
 -- CreateTable
 CREATE TABLE `landmark` (
     `land_id` INTEGER NOT NULL,
+    `label` VARCHAR(50) NULL,
     `nama` VARCHAR(50) NULL,
     `lat` FLOAT NULL,
     `lon` FLOAT NULL,
-    `distance` FLOAT NULL,
     `category` VARCHAR(50) NULL,
     `city` VARCHAR(50) NULL,
     `price` INTEGER NULL,
@@ -21,6 +21,7 @@ CREATE TABLE `wisata` (
     `land_id` INTEGER NULL,
     `nama` VARCHAR(50) NULL,
     `city` VARCHAR(50) NULL,
+    `provinsi` VARCHAR(50) NULL,
     `lat` FLOAT NULL,
     `lon` FLOAT NULL,
     `distance` FLOAT NULL,

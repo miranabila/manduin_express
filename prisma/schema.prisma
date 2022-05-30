@@ -9,10 +9,10 @@ datasource db {
 
 model landmark {
   land_id     Int      @id
+  label       String?  @db.VarChar(50)
   nama        String?  @db.VarChar(50)
   lat         Float?   @db.Float
   lon         Float?   @db.Float
-  distance    Float?   @db.Float
   category    String?  @db.VarChar(50)
   city        String?  @db.VarChar(50)
   price       Int?
@@ -27,6 +27,7 @@ model wisata {
   land_id     Int?
   nama        String?   @db.VarChar(50)
   city        String?   @db.VarChar(50)
+  provinsi    String?   @db.VarChar(50)
   lat         Float?    @db.Float
   lon         Float?    @db.Float
   distance    Float?    @db.Float
