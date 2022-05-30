@@ -101,15 +101,6 @@ app.get('/:tabel', async (req, res) => {
   }
 })
 
-app.post(`/landmarks/`, async (req, res) => {
-  const { photos } = req.body
-  
-  const placeAroundLandmark = await prisma.landmark.findUnique({
-    where: { nama: { contains: photos } },
-  })
-  res.json(placeAroundLandmark)
-})
-
 app.get(`/landmark/:id`, async (req, res) => {
   const { id } = req.params
 
