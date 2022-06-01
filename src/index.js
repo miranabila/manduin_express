@@ -35,16 +35,34 @@ app.get(`/landmark/label=:searchString`, async (req, res) => {
   const { searchString } = req.params
 
   const namaLandmark = await prisma.landmark.findMany({
-    where:  { nama: { contains: searchString } },
+    where:  { label: { contains: searchString } },
   })
   res.json(namaLandmark)
 })
 
-app.get(`/wisata/:id`, async (req, res) => {
+app.get(`/landmark/label=:searchString/wisata`, async (req, res) => {
+  const { searchString } = req.params
+
+  const transLandmark = await prisma.transaksi.findMany({
+    where:  { label: { contains: searchString } },
+  })
+  res.json(transLandmark)
+})
+
+app.get(`/wisata/provinsi=:searchString`, async (req, res) => {
+  const { searchString } = req.params
+
+  const provWisata = await prisma.wisata.findMany({
+    where:  { provinsi: { contains: searchString } },
+  })
+  res.json(provWisata)
+})
+
+app.get(`/wisata/id=:id`, async (req, res) => {
   const { id } = req.params
 
   const getWisata = await prisma.wisata.findMany({
-    where: { land_id: Number(id) },
+    where: { place_id: Number(id) },
   })
   res.json(getWisata)
 })
