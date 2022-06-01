@@ -28,7 +28,11 @@ app.get(`/landmark/id=:id`, async (req, res) => {
   const getLandmark = await prisma.landmark.findUnique({
     where: { land_id: Number(id) },
   })
-  res.json(getLandmark)
+
+  if(getLandmark == null)
+    res.json(400,'Kosong')
+  else
+    res.json(getLandmark)
 })
 
 app.get(`/landmark/label=:searchString`, async (req, res) => {
@@ -37,7 +41,11 @@ app.get(`/landmark/label=:searchString`, async (req, res) => {
   const namaLandmark = await prisma.landmark.findMany({
     where:  { label: { contains: searchString } },
   })
-  res.json(namaLandmark)
+
+  if(namaLandmark == "")
+    res.json(400,'Kosong')
+  else
+    res.json(namaLandmark)
 })
 
 app.get(`/landmark/label=:searchString/wisata`, async (req, res) => {
@@ -46,7 +54,11 @@ app.get(`/landmark/label=:searchString/wisata`, async (req, res) => {
   const transLandmark = await prisma.transaksi.findMany({
     where:  { label: { contains: searchString } },
   })
-  res.json(transLandmark)
+
+  if(transLandmark == "")
+    res.json(400,'Kosong')
+  else
+    res.json(transLandmark)
 })
 
 app.get(`/wisata/provinsi=:searchString`, async (req, res) => {
@@ -55,16 +67,24 @@ app.get(`/wisata/provinsi=:searchString`, async (req, res) => {
   const provWisata = await prisma.wisata.findMany({
     where:  { provinsi: { contains: searchString } },
   })
-  res.json(provWisata)
+
+  if(provWisata == "")
+    res.json(400,'Kosong')
+  else
+    res.json(provWisata)
 })
 
 app.get(`/wisata/id=:id`, async (req, res) => {
   const { id } = req.params
 
-  const getWisata = await prisma.wisata.findMany({
+  const getWisata = await prisma.wisata.findUnique({
     where: { place_id: Number(id) },
   })
-  res.json(getWisata)
+
+  if(getWisata == null)
+    res.json(400,'Kosong')
+  else
+    res.json(getWisata)
 })
 
 const server = app.listen(3000, '0.0.0.0', () =>
