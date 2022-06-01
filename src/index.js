@@ -6,89 +6,6 @@ const app = express()
 
 app.use(express.json())
 
-app.post(`/signup`, async (req, res) => {
-  const { name, email, posts } = req.body
-
-  const postData = posts
-    ? posts.map((post) => {
-        return { title: post.title, content: post.content || undefined }
-      })
-    : []
-
-  const result = await prisma.user.create({
-    data: {
-      name,
-      email,
-      posts: {
-        create: postData,
-      },
-    },
-  })
-  res.json(result)
-})
-
-app.post(`/post`, async (req, res) => {
-  const { title, content, authorEmail } = req.body
-  const result = await prisma.post.create({
-    data: {
-      title,
-      content,
-      author: { connect: { email: authorEmail } },
-    },
-  })
-  res.json(result)
-})
-
-app.put('/post/:id/views', async (req, res) => {
-  const { id } = req.params
-
-  try {
-    const post = await prisma.post.update({
-      where: { id: Number(id) },
-      data: {
-        viewCount: {
-          increment: 1,
-        },
-      },
-    })
-
-    res.json(post)
-  } catch (error) {
-    res.json({ error: `Post with ID ${id} does not exist in the database` })
-  }
-})
-
-app.put('/publish/:id', async (req, res) => {
-  const { id } = req.params
-
-  try {
-    const postData = await prisma.post.findUnique({
-      where: { id: Number(id) },
-      select: {
-        published: true,
-      },
-    })
-
-    const updatedPost = await prisma.post.update({
-      where: { id: Number(id) || undefined },
-      data: { published: !postData.published || undefined },
-    })
-    res.json(updatedPost)
-  } catch (error) {
-    res.json({ error: `Post with ID ${id} does not exist in the database` })
-  }
-})
-
-app.delete(`/post/:id`, async (req, res) => {
-  const { id } = req.params
-  const post = await prisma.post.delete({
-    where: {
-      id: Number(id),
-    },
-  })
-  res.json(post)
-})
-
 app.get('/:tabel', async (req, res) => {
   const { tabel } = req.params
   if (tabel == "landmark"){
@@ -128,7 +45,6 @@ app.get(`/wisata/:id`, async (req, res) => {
   res.json(getWisata)
 })
 
-
 app.get('/user/:id/drafts', async (req, res) => {
   const { id } = req.params
 
@@ -143,34 +59,6 @@ app.get('/user/:id/drafts', async (req, res) => {
     })
 
   res.json(drafts)
-})
-
-app.get('/feed', async (req, res) => {
-  const { searchString, skip, take, orderBy } = req.query
-
-  const or = searchString
-    ? {
-        OR: [
-          { nama: { contains: searchString } },
-          { content: { contains: searchString } },
-        ],
-      }
-    : {}
-
-  const posts = await prisma.landmark.findMany({
-    where: {
-      published: true,
-      ...or,
-    },
-    include: { author: true },
-    take: Number(take) || undefined,
-    skip: Number(skip) || undefined,
-    orderBy: {
-      updatedAt: orderBy || undefined,
-    },
-  })
-
-  res.json(posts)
 })
 
 const server = app.listen(3000, () =>
