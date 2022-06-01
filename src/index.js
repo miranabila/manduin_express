@@ -16,9 +16,13 @@ app.get('/:tabel', async (req, res) => {
     const tabels = await prisma.wisata.findMany()
   res.json(tabels)
   }
+  if (tabel == "transaksi"){
+    const tabels = await prisma.transaksi.findMany()
+  res.json(tabels)
+  }
 })
 
-app.get(`/landmark/:id`, async (req, res) => {
+app.get(`/landmark/id=:id`, async (req, res) => {
   const { id } = req.params
 
   const getLandmark = await prisma.landmark.findUnique({
@@ -27,7 +31,7 @@ app.get(`/landmark/:id`, async (req, res) => {
   res.json(getLandmark)
 })
 
-app.get(`/namalandmark/:searchString`, async (req, res) => {
+app.get(`/landmark/label=:searchString`, async (req, res) => {
   const { searchString } = req.params
 
   const namaLandmark = await prisma.landmark.findMany({
